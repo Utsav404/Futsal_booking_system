@@ -1,5 +1,6 @@
 <html>
- <head>
+
+<head>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,97 +26,96 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style type="text/CSS">
-		th,td{
+        th,td{
 			padding:5px; 
 		}
 	</style>
 
 </head>
+
 <body>
-	<body style=" background-image: url(img/backgr.jpg);">
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="background:#213e4a; font-family:impact; font-size:20px; ">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href=
-                " <?php
-                    session_start();
-                    if(isset($_SESSION['email']))
-                    {  
-                     if($_SESSION['email'] == 'admin' )
-                        echo 'admin.php';
-                    else
-                        echo 'customer.php';
-                    }
-                    else 
-                      echo 'index.php';
+    <body style=" background-image: url(img/backgr.jpg);">
 
-                    ?>" 
-                style="background: linear-gradient(black,darkgreen);
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation"
+            style="background:#213e4a; font-family:impact; font-size:20px; ">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href=" <?php
+													session_start();
+													if (isset($_SESSION['email'])) {
+														if ($_SESSION['email'] == 'admin')
+															echo 'admin.php';
+														else
+															echo 'customer.php';
+													} else
+														echo 'index.php';
+													?>" style="background: linear-gradient(black,darkgreen);
                  font-family:abril fatface; font-size: 26px; color: white; border:1px solid skyblue; border-radius: 15px; align-items:center;">
-                    &raquo; Baneshwor Futsal &laquo;</a>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    
-                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Booking <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="#approved">Approved</a>
-                            </li>
-                            <li>
-                                <a href="#pending">Pending</a>
-                            </li>
-                        </ul>
-                      </li>
-            
-                
-                    <li>
-                        <a href="#manage">Manage Users</a>
-                    </li>
-                    <?php
-                   if(isset($_SESSION['admin']) && $_SESSION['admin'] == 1)
-                      echo '<li>
+                        &raquo; Baneshwor Futsal &laquo;</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Booking <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#approved">Approved</a>
+                                </li>
+                                <li>
+                                    <a href="#pending">Pending</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li>
+                            <a href="#manage">Manage Users</a>
+                        </li>
+                        <?php
+						if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1)
+							echo '<li>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user">&emsp;admin <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                       <li>
                         <a href="destroy.php"> &nbsp;Logout <span class="glyphicon glyphicon-log-out"></a>
                       </li>';
 
-                    ?>
-                </ul>
+						?>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
             </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
+            <!-- /.container -->
+        </nav>
 
-<?php
+        <?php
 
-	//session_start();
-	if(isset($_SESSION['admin']) && $_SESSION['admin'] == 1)
-	{
-		
-		$connect = mysqli_connect("localhost","root","") or die ("Unable to connect to MySQL Sever.");
+		//session_start();
+		$connect = mysqli_connect("localhost", "root", "") or die("Unable to connect to MySQL Sever.");
 		require 'config.php';
-		
-		if(isset($_POST['approve']))
-		{
-			$book_id = $_POST['bookingid'];
- 			$approv = "update booking set confirm_key = 11 where id = '$book_id'";
-			$connect->query($approv);
+		if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1) {
 
-			/* for sending mail to the user after confirmation!
+			// $connect = mysqli_connect("localhost","root","") or die ("Unable to connect to MySQL Sever.");
+			// require 'config.php';
+
+			if (isset($_POST['approve'])) {
+				$book_id = $_POST['bookingid'];
+				$approv = "update booking set confirm_key = 11 where id = '$book_id'";
+				$connect->query($approv);
+
+				/* for sending mail to the user after confirmation!
 			$t=time()+13500;
 			$time=date("Y:M:d @ H:i:s",$t);
 
@@ -127,23 +127,21 @@
 					   "CC: somebodyelse@example.com";
 
 			mail($to,$subject,$txt,$headers);*/
-		}
-		if(isset($_POST['decline']))
-		{
-			$book_id = $_POST['bookingid'];
- 			$declin = "delete from booking where id ='$book_id'";
-			$connect->query($declin);
-		}
+			}
+			if (isset($_POST['decline'])) {
+				$book_id = $_POST['bookingid'];
+				$declin = "delete from booking where id ='$book_id'";
+				$connect->query($declin);
+			}
 
-		if(isset($_POST['delete']))
-		{
-			$del_id = $_POST['del_id'];
- 			$del = "delete from register where id ='$del_id'";
-			$connect->query($del);
-		}
-		//to show stats status
-		
-		/*
+			if (isset($_POST['delete'])) {
+				$del_id = $_POST['del_id'];
+				$del = "delete from register where id ='$del_id'";
+				$connect->query($del);
+			}
+			//to show stats status
+
+			/*
 		$userData = "select * from users;";
 		$itemData = "select * from items where status = 'Y';";
 		$orderData = "select * from orders;";
@@ -187,135 +185,125 @@
 			";
 		*/
 
-	$reqPending = "select * from booking where confirm_key = 10;";
-	$res = $connect->query($reqPending);
-	$i=1;
-	//This div is for the booking requests that await approval from the admin
-?>
-	<div style = "background-color: #eee;
+			$reqPending = "select * from booking where confirm_key = 10;";
+			$res = $connect->query($reqPending);
+			$i = 1;
+			//This div is for the booking requests that await approval from the admin
+		?>
+        <div style="background-color: #eee;
 				overflow:auto; 
 				border:2px solid grey; 
 				margin: 50px; 
-				box-shadow: 10px 10px 5px #DCDCDC;"
-				class="container">
+				box-shadow: 10px 10px 5px #DCDCDC;" class="container">
 
-				<h3><a name="pending"> Pending requests:</h3></a>
-	
-			<?php
-			while($row = $res->fetch_assoc())
-			{
-				$email=$row['email'];
-				$bookingid=$row['id'];
-				$deadLine=$row['timecheck']+86400; 
-				if ($deadLine-time()<13500)	
-					$connect->query("delete from booking where id= '$bookingid'");
-				$que = "select id,lname, gender, address from register where email = '$email'";
-				$sqlrun = $connect->query($que);
-				$user = $sqlrun->fetch_assoc();
+            <h3><a name="pending"> Pending requests:</h3></a>
+
+            <?php
+				while ($row = $res->fetch_assoc()) {
+					$email = $row['email'];
+					$bookingid = $row['id'];
+					$deadLine = $row['timecheck'] + 86400;
+					if ($deadLine - time() < 13500)
+						$connect->query("delete from booking where id= '$bookingid'");
+					$que = "select id,lname, gender, address from register where email = '$email'";
+					$sqlrun = $connect->query($que);
+					$user = $sqlrun->fetch_assoc();
 					echo "<br><div class = 'row' style = 'border:2px;'>
 					<div class='col-md-6'>
 					<form method = 'post' action = 'admin.php'>
 					<table border = '0'>
-					<u><tr><td> Booking ID </td><td>: <b>".$row['id']."</b></td></tr></u>
-					<tr><td> Booked By  </td><td><b>: ".$row['user'].'&nbsp'. $user['lname']."</b></tr>
-					<tr><td> Booked Date </td><td> 	: ".$row['bookday']."</td></tr>
-					<tr><td> User ID </td><td>		: ".$user['id']."</td></tr>
-					<tr><td> Booked at </td><td> 	: ".date("Y/M/d (H:i:s)",$row['timecheck'])."</td></tr>
-					<tr><td> Shift </td><td> 		: ".$row['shift']."</td></tr>
-					<tr><td> Gender </td><td> 		: ".$user['gender']."</td></tr>
-					<tr><td> Address </td><td> 		: ".$user['address']."</td></tr>
-					<tr><td> Contact </td><td> 		: ".$row['contact']."</td></tr>
-					<tr><td> Email  </td><td> 		: ".$row['email']."</td></tr>
-					<tr><td > Payment deadLine </td><td> 	:<b style='background-color:orange;'>".date("Y  M  d ( H:i:s )",$deadLine)."</b></td></tr>
-					<tr><td> Voucher no. </td><td> 		: ".$row['vno']."</td></tr>
+					<u><tr><td> Booking ID </td><td>: <b>" . $row['id'] . "</b></td></tr></u>
+					<tr><td> Booked By  </td><td><b>: " . $row['user'] . '&nbsp' . $user['lname'] . "</b></tr>
+					<tr><td> Booked Date </td><td> 	: " . $row['bookday'] . "</td></tr>
+					<tr><td> User ID </td><td>		: " . $user['id'] . "</td></tr>
+					<tr><td> Booked at </td><td> 	: " . date("Y/M/d (H:i:s)", $row['timecheck']) . "</td></tr>
+					<tr><td> Shift </td><td> 		: " . $row['shift'] . "</td></tr>
+					<tr><td> Gender </td><td> 		: " . $user['gender'] . "</td></tr>
+					<tr><td> Address </td><td> 		: " . $user['address'] . "</td></tr>
+					<tr><td> Contact </td><td> 		: " . $row['contact'] . "</td></tr>
+					<tr><td> Email  </td><td> 		: " . $row['email'] . "</td></tr>
+					<tr><td > Payment deadLine </td><td> 	:<b style='background-color:orange;'>" . date("Y  M  d ( H:i:s )", $deadLine) . "</b></td></tr>
+					<tr><td> Voucher no. </td><td> 		: " . $row['vno'] . "</td></tr>
 					</table><br>
-					<input type = 'hidden' name = 'email' value = ".$row['email'].">
-					<input type = 'hidden' name = 'bookingid' value = ".$row['id'].">
+					<input type = 'hidden' name = 'email' value = " . $row['email'] . ">
+					<input type = 'hidden' name = 'bookingid' value = " . $row['id'] . ">
 
 					<input type = 'submit' class='button' name = 'approve' value = 'Approve'>
 					<input type = 'submit' name = 'decline' class='button' value = 'Decline'>
 					</form> </div>
 					<div class='col-md-6'>
-					<img src = ".$row['vimgloc']." height = '300' width = '450'>
+					<img src = " . $row['vimgloc'] . " height = '300' width = '450'>
 					</div>
 					</div><br><br>";
-				$i++;
-			}
-			$i--;
+					$i++;
+				}
+				$i--;
 
-			echo "<hr><h4>&emsp;
-				<b>Total number of booking requests = ".$i." </b>
+				echo "<hr><h4>&emsp;
+				<b>Total number of booking requests = " . $i . " </b>
 				</h4></div>";
 
-			
 
-			$approved = "select * from booking where confirm_key = 11;";
-			$res = $connect->query($approved);
-			$i=1;
-			//This div is for the bookig requests that have been approved by the admin
-?>
-				<div style = "background-color: #eee;
+
+				$approved = "select * from booking where confirm_key = 11;";
+				$res = $connect->query($approved);
+				$i = 1;
+				//This div is for the bookig requests that have been approved by the admin
+				?>
+            <div style="background-color: #eee;
 				overflow:auto; 
 				border:2px solid grey; 
 				margin: 50px; 
-				box-shadow: 10px 10px 5px #DCDCDC;"
-				class="container">
-				<h3><a name="approved">Approved requests: </a></h3>
-<?php
-			while($row = $res->fetch_assoc())
-			{
-				$email=$row['email'];
-				$bookingid=$row['id'];
-				$que = "select id,lname, gender, address from register where email = '$email'";
-				$sqlrun = $connect->query($que);
-				$user = $sqlrun->fetch_assoc();
+				box-shadow: 10px 10px 5px #DCDCDC;" class="container">
+                <h3><a name="approved">Approved requests: </a></h3>
+                <?php
+				while ($row = $res->fetch_assoc()) {
+					$email = $row['email'];
+					$bookingid = $row['id'];
+					$que = "select id,lname, gender, address from register where email = '$email'";
+					$sqlrun = $connect->query($que);
+					$user = $sqlrun->fetch_assoc();
 					echo "<br><div class='row'>
 					<div class='col-md-6'>
 					<form method = 'post' action = 'admin.php'>
 					<table border = '0' >
-					<u><tr><td> Booking ID </td><td>: <b>".$row['id']."</b></td></tr></u>
-					<tr><td> Booked By  </td><td> 	: ".$row['user'].'&nbsp'. $user['lname']."</tr>
-					<tr><td> Booked Date </td><td> 	: ".$row['bookday']."</td></tr>
-					<tr><td> User ID </td><td>		: ".$user['id']."</td></tr>
-					<tr><td> Booked at </td><td> 	: ".date("Y/M/d (H:i:s)",$row['timecheck'])."</td></tr>
-					<tr><td> Shift </td><td> 		: ".$row['shift']."</td></tr>
-					<tr><td> Gender </td><td> 		: ".$user['gender']."</td></tr>
-					<tr><td> Address </td><td> 		: ".$user['address']."</td></tr>
-					<tr><td> Contact </td><td> 		: ".$row['contact']."</td></tr>
-					<tr><td> Email  </td><td> 		: ".$row['email']."</td></tr>
-					<tr><td> Voucher no. </td><td> 	: ".$row['vno']."</td></tr>
+					<u><tr><td> Booking ID </td><td>: <b>" . $row['id'] . "</b></td></tr></u>
+					<tr><td> Booked By  </td><td> 	: " . $row['user'] . '&nbsp' . $user['lname'] . "</tr>
+					<tr><td> Booked Date </td><td> 	: " . $row['bookday'] . "</td></tr>
+					<tr><td> User ID </td><td>		: " . $user['id'] . "</td></tr>
+					<tr><td> Booked at </td><td> 	: " . date("Y/M/d (H:i:s)", $row['timecheck']) . "</td></tr>
+					<tr><td> Shift </td><td> 		: " . $row['shift'] . "</td></tr>
+					<tr><td> Gender </td><td> 		: " . $user['gender'] . "</td></tr>
+					<tr><td> Address </td><td> 		: " . $user['address'] . "</td></tr>
+					<tr><td> Contact </td><td> 		: " . $row['contact'] . "</td></tr>
+					<tr><td> Email  </td><td> 		: " . $row['email'] . "</td></tr>
+					<tr><td> Voucher no. </td><td> 	: " . $row['vno'] . "</td></tr>
 					</table><br>
-					<input type = 'hidden' name = 'email' value = ".$row['email'].">
-					<input type = 'hidden' name = 'bookingid' value = ".$row['id'].">
+					<input type = 'hidden' name = 'email' value = " . $row['email'] . ">
+					<input type = 'hidden' name = 'bookingid' value = " . $row['id'] . ">
 
 					<input type = 'submit' name = 'decline' class='button' value = 'Cancel Booking'>
 					</form> </div>
 					<div class='col-md-6'>
-						<img src = ".$row['vimgloc']." height = '300' width = '450'>
+						<img src = " . $row['vimgloc'] . " height = '300' width = '450'>
 					</div>
 					</div><br><br>";
-					
-				$i++;
+
+					$i++;
+				}
+				$i--;
+				echo "<hr><h4> &emsp;
+			<b>Total number of approved bookings = " . $i . " </b></h4></div>";
+			} else {
+				echo "Admin not verified! Please login as Admin.";
 			}
-			$i--;
-			echo "<hr><h4> &emsp;
-			<b>Total number of approved bookings = ".$i." </b></h4></div>";
-		 
 
-		 
-
-	} 
-	else
-	{
-		echo "Admin not verified! Please login as Admin.";
-	}
-
-	$que = "SELECT * FROM register WHERE email != 'admin'";
-    $run = $connect->query($que);
+			$que = "SELECT * FROM register WHERE email != 'admin'";
+			$run = $connect->query($que);
 
 
-	$count =mysqli_num_rows($run);
-	echo '
+			$count = mysqli_num_rows($run);
+			echo '
 	
 	<div style = "background-color: #eee;
 				overflow:auto; 
@@ -339,24 +327,23 @@
 			
 			<form name="edit" action="admin.php" name="delete" method="POST">';
 
-	while($row = $run->fetch_assoc())
-	{
-		
-		echo "
+			while ($row = $run->fetch_assoc()) {
+
+				echo "
 			
 				<tr >
-					<td>".$row['id']."</td>
-					<td>".$row['fname']."</td>
-					<td>".$row['lname']."</td>
-					<td>".$row['gender']."</td>
-					<td>".$row['address']."</td>
-					<td>".$row['email']."</td>
-					<td>".$row['contact']."</td>
+					<td>" . $row['id'] . "</td>
+					<td>" . $row['fname'] . "</td>
+					<td>" . $row['lname'] . "</td>
+					<td>" . $row['gender'] . "</td>
+					<td>" . $row['address'] . "</td>
+					<td>" . $row['email'] . "</td>
+					<td>" . $row['contact'] . "</td>
 					
 				</tr>";
-	}
+			}
 
-	echo	'</table><br>
+			echo	'</table><br>
 	<button type="button" class="btn btn-info " data-toggle="modal" data-target="#myModal" style="background: skyblue; position:relative; left:6%; width:100px; color:#222;">Edit</button>
 
   <!-- Modal -->
@@ -382,17 +369,18 @@
      </div>
     </div>
 	
-	<p><h4><b>&emsp; Total no. of users = '."$count".'</h4></b></p>
+	<p><h4><b>&emsp; Total no. of users = ' . "$count" . '</h4></b></p>
 	</div>
 	</div>';
-	$connect->close();
-?>
+			$connect->close();
+				?>
 
 
 
- <script src="js/jquery.js"></script>
+                <script src="js/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-</body>
+                <!-- Bootstrap Core JavaScript -->
+                <script src="js/bootstrap.min.js"></script>
+    </body>
+
 </html>
